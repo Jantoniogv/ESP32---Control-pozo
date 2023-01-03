@@ -10,6 +10,15 @@
 #include "debug_utils.h"
 #define DEBUG
 
+// Declara le controlador del temporizador de la medida de la corriente
+TimerHandle_t start_motor_timer;
+
+// Se encarga de tomar la medida de la corriente y enviarla por el puerto serie
+void start_motor()
+{
+    digitalWrite(MOTOR, HIGH);
+}
+
 void data_serial_receive_control(String data)
 {
     // Control de las valvulas motorizadas del pozo
@@ -22,15 +31,18 @@ void data_serial_receive_control(String data)
         if (payload == ON)
         {
             DEBUG_PRINT("Dep_galo=ON");
+
             digitalWrite(EV_DEP_HUERTO, HIGH);
             digitalWrite(EV_CASA, HIGH);
-            vTaskDelay(1000);
-            digitalWrite(MOTOR, HIGH);
+
+            xTimerStart(start_motor_timer, 0);
         }
         else if (payload == OFF)
         {
             DEBUG_PRINT("Dep_galo=OFF");
+
             digitalWrite(MOTOR, LOW);
+
             digitalWrite(EV_DEP_HUERTO, LOW);
             digitalWrite(EV_CASA, LOW);
         }
@@ -46,15 +58,18 @@ void data_serial_receive_control(String data)
         if (payload == ON)
         {
             DEBUG_PRINT("Dep_huerto=ON");
+
             digitalWrite(EV_DEP_GALO_BAJO, HIGH);
             digitalWrite(EV_CASA, HIGH);
-            vTaskDelay(1000);
-            digitalWrite(MOTOR, HIGH);
+
+            xTimerStart(start_motor_timer, 0);
         }
         else if (payload == OFF)
         {
             DEBUG_PRINT("Dep_huerto=OFF");
+
             digitalWrite(MOTOR, LOW);
+
             digitalWrite(EV_DEP_GALO_BAJO, LOW);
             digitalWrite(EV_CASA, LOW);
         }
@@ -70,15 +85,18 @@ void data_serial_receive_control(String data)
         if (payload == ON)
         {
             DEBUG_PRINT("Casa=ON");
+
             digitalWrite(EV_DEP_HUERTO, HIGH);
             digitalWrite(EV_DEP_GALO_BAJO, HIGH);
-            vTaskDelay(1000);
-            digitalWrite(MOTOR, HIGH);
+
+            xTimerStart(start_motor_timer, 0);
         }
         else if (payload == OFF)
         {
             DEBUG_PRINT("Casa=OFF");
+
             digitalWrite(MOTOR, LOW);
+
             digitalWrite(EV_DEP_HUERTO, LOW);
             digitalWrite(EV_DEP_GALO_BAJO, LOW);
         }

@@ -12,24 +12,12 @@
 struct elecVal
 {
     bool evDepGaloBajo = false;
-    bool evDepGaloBajoSec1 = false;
-    bool evDepGaloBajoSec2 = false;
 
     bool evDepHuerto = false;
-    bool evDepHuertoSec1 = false;
-    bool evDepHuertoSec2 = false;
 
     bool evCasa = false;
 
 } elecVal; */
-
-// Estado de cada medidor de nivel
-/* struct nivelDep
-{
-    uint8_t nivelDepHuerto = 0;
-    uint8_t nivelDepGaloBajo = 0;
-
-} nivelDep; */
 
 #define EV_DEP_GALO_BAJO 2
 #define EV_DEP_HUERTO 15
@@ -72,8 +60,21 @@ const char correinteMotor[] = "corriente/motor";
 
 void initPinDevice()
 {
-    pinMode(25, OUTPUT);
-    digitalWrite(25, LOW);
+    // Inicializa pin motor
+    pinMode(MOTOR, OUTPUT);
+    digitalWrite(MOTOR, LOW);
+
+    // Inicializa pin dep. galo bajo
+    pinMode(EV_DEP_GALO_BAJO, OUTPUT);
+    digitalWrite(EV_DEP_GALO_BAJO, LOW);
+
+    // Inicializa pin dep. huerto
+    pinMode(EV_DEP_HUERTO, OUTPUT);
+    digitalWrite(EV_DEP_HUERTO, LOW);
+
+    // Inicializa pin casa
+    pinMode(EV_CASA, OUTPUT);
+    digitalWrite(EV_CASA, LOW);
 
     write_log("Pines de las electrovalvulas y motor iniciados...");
 }

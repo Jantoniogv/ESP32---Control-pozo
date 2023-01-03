@@ -21,7 +21,6 @@ TimerHandle_t current_measure_timer;
 // Se encarga de tomar la medida de la corriente y enviarla por el puerto serie
 void current_measure()
 {
-
     float current;
 
     int val[N_SAMPLES];
