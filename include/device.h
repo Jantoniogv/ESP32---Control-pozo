@@ -8,7 +8,7 @@
 #include "debug_utils.h"
 #define DEBUG
 
-/* // Estado de cada electrovalvula
+// Estado de cada electrovalvula
 struct elecVal
 {
     bool evDepGaloBajo = false;
@@ -17,7 +17,7 @@ struct elecVal
 
     bool evCasa = false;
 
-} elecVal; */
+} elecVal;
 
 #define EV_DEP_GALO_BAJO 2
 #define EV_DEP_HUERTO 15

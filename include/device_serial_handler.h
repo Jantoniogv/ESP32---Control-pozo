@@ -28,12 +28,17 @@ void data_serial_receive_control(String data)
 
         DEBUG_PRINT(data);
 
-        if (payload == ON)
+        if (payload == ON && elecVal.evDepGaloBajo == false)
         {
             DEBUG_PRINT("Dep_galo=ON");
 
+            // Para el motor para asegurarse de hacer todas las maniobras con el parada, ya que puede estar en marcha de un trabajo anterior
+            digitalWrite(MOTOR, LOW);
+
             digitalWrite(EV_DEP_HUERTO, HIGH);
             digitalWrite(EV_CASA, HIGH);
+
+            elecVal.evDepGaloBajo = true;
 
             xTimerStart(start_motor_timer, 0);
         }
@@ -45,6 +50,8 @@ void data_serial_receive_control(String data)
 
             digitalWrite(EV_DEP_HUERTO, LOW);
             digitalWrite(EV_CASA, LOW);
+
+            elecVal.evDepGaloBajo = false;
         }
         serial_tx((String)evDepGaloBajoState + "=" + payload);
     }
@@ -55,12 +62,17 @@ void data_serial_receive_control(String data)
 
         DEBUG_PRINT(data);
 
-        if (payload == ON)
+        if (payload == ON && elecVal.evDepHuerto == false)
         {
             DEBUG_PRINT("Dep_huerto=ON");
 
+            // Para el motor para asegurarse de hacer todas las maniobras con el parada, ya que puede estar en marcha de un trabajo anterior
+            digitalWrite(MOTOR, LOW);
+
             digitalWrite(EV_DEP_GALO_BAJO, HIGH);
             digitalWrite(EV_CASA, HIGH);
+
+            elecVal.evDepHuerto = true;
 
             xTimerStart(start_motor_timer, 0);
         }
@@ -72,6 +84,8 @@ void data_serial_receive_control(String data)
 
             digitalWrite(EV_DEP_GALO_BAJO, LOW);
             digitalWrite(EV_CASA, LOW);
+
+            elecVal.evDepHuerto = false;
         }
         serial_tx((String)evDepHuertoState + "=" + payload);
     }
@@ -82,12 +96,17 @@ void data_serial_receive_control(String data)
 
         DEBUG_PRINT(data);
 
-        if (payload == ON)
+        if (payload == ON && elecVal.evCasa == false)
         {
             DEBUG_PRINT("Casa=ON");
 
+            // Para el motor para asegurarse de hacer todas las maniobras con el parada, ya que puede estar en marcha de un trabajo anterior
+            digitalWrite(MOTOR, LOW);
+
             digitalWrite(EV_DEP_HUERTO, HIGH);
             digitalWrite(EV_DEP_GALO_BAJO, HIGH);
+
+            elecVal.evCasa = true;
 
             xTimerStart(start_motor_timer, 0);
         }
@@ -99,6 +118,8 @@ void data_serial_receive_control(String data)
 
             digitalWrite(EV_DEP_HUERTO, LOW);
             digitalWrite(EV_DEP_GALO_BAJO, LOW);
+
+            elecVal.evCasa = false;
         }
         serial_tx((String)evCasaState + "=" + payload);
     }
