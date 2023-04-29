@@ -30,34 +30,6 @@ void receiveDataLora(void *pvParameter)
     {
         String packetData = "";
 
-        // try to parse packet
-        /*         int packetSize = LoRa.parsePacket();
-
-                if (packetSize)
-                {
-
-                    // received a packet
-                    packSize = String(packetSize, DEC);
-                    DEBUG_PRINT(packSize);
-
-                    rssi = String(LoRa.packetRssi(), DEC);
-                    DEBUG_PRINT(rssi);
-
-                    // read packet
-                    while (LoRa.available())
-                    {
-                        packetData += (char)LoRa.read();
-                    }
-
-                    // Procesa los datos recibidos
-                    data_lora_receive_control(packetData);
-
-                    // sendDataLora(packetData + " OK");
-
-                    write_log("Receive LoRa: " + packetData);
-                    DEBUG_PRINT(packetData);
-                } */
-
         int packetSize = LoRa.parsePacket();
 
         if (packetSize)
