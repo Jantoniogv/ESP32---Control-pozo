@@ -16,8 +16,8 @@ void serial_rx()
     {
         String data = SerialCom.readStringUntil('\n');
 
-        write_log(data);
         DEBUG_PRINT("Serial_com_rec: " + data);
+        write_log("Serial_com_rec: " + data);
 
         data_serial_receive_control(data);
     }

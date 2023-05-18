@@ -4,6 +4,7 @@
 #include <Arduino.h>
 
 #include "serial_init.h"
+#include "log.h"
 
 #include "debug_utils.h"
 #define DEBUG
@@ -28,7 +29,7 @@ void serial_tx(void *pvParameter)
             DEBUG_PRINT("Serial_com_send: " + data);
         }
 
-        vTaskDelay(pdMS_TO_TICKS(200));
+        vTaskDelay(pdMS_TO_TICKS(50));
     }
 }
 

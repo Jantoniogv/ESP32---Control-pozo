@@ -17,7 +17,8 @@ void sendDataLora(String data)
     LoRa.print(data);
     LoRa.endPacket();
 
-    write_log("send LoRa: " + data);
+    DEBUG_PRINT("LoRa send: " + data);
+    write_log("LoRa send: " + data);
 }
 
 #endif //_LORA_SEND_H_

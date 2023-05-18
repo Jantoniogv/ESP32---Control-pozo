@@ -10,8 +10,6 @@
 #define DEBUG
 #include "debug_utils.h"
 
-TimerHandle_t wifiReconnectTimer;
-
 void wifiConfigSTA(IPAddress local_ip, IPAddress gateway, IPAddress subnet, IPAddress dns1 = (uint32_t)0x00000000, IPAddress dns2 = (uint32_t)0x00000000)
 {
 
@@ -110,28 +108,15 @@ void WiFiEvent(WiFiEvent_t event)
         write_log(WiFi.localIP().toString());
         break;
     case SYSTEM_EVENT_STA_DISCONNECTED:
+
         DEBUG_PRINT("WiFi lost connection");
         write_log("WiFi lost connection");
 
-        xTimerStart(wifiReconnectTimer, 0);
+        WiFi.reconnect();
+        // wifiConnectSTA();
+
         break;
     }
-}
-
-void printDataWifiAP(Config &configData)
-{
-    /* display.clearDisplay();
-    display.setCursor(0, 0);
-    display.setTextSize(1);
-    display.setTextColor(WHITE);
-    display.println("SSID wifi: \n");
-    display.println(configData.getSsidAP());
-    display.println("\nIP punto acceso wifi: ");
-    display.println(configData.getIPap());
-
-    printDisplayOled();
-
-    vTaskDelay(3000); */
 }
 
 #endif //_WIFI_FUNCTIONS_H

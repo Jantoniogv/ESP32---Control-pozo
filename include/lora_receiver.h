@@ -43,14 +43,11 @@ void receiveDataLora(void *pvParameter)
                 packetData += (char)LoRa.read();
             }
 
+            DEBUG_PRINT("LoRa rec: " + packetData);
+            write_log("LoRa rec: " + packetData);
+
             // Procesa los datos recibidos
-            // data_lora_receive_control(packetData);
-
             data_lora_receive_control(packetData);
-
-            write_log("Receive LoRa: " + packetData);
-
-            DEBUG_PRINT("Paquete de datos: " + packetData);
         }
 
         // Calcula la memoria libre que queda de esta tarea, a fin de calcular la memoria necesaria para ella

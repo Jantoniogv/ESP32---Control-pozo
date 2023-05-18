@@ -78,9 +78,10 @@ void initPinDevice()
     pinMode(EV_CASA, OUTPUT);
     digitalWrite(EV_CASA, HIGH);
 
-    write_log("Pines de las electrovalvulas y motor iniciados...");
-
     DEBUG_PRINT("Pines de las electrovalvulas y motor iniciados...");
+
+    // Escribe en el log inicializacion de los pines
+    write_log("Pines de las electrovalvulas y motor iniciados...");
 }
 
 #endif // _DEVICE_H_

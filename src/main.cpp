@@ -40,9 +40,6 @@ void setup()
   // Inicia el display OLED
   // init_oled();
 
-  // Iniciamos los temporizadores encargados de reconectar la conexion wifi y mqtt, en caso de desconexion
-  wifiReconnectTimer = xTimerCreate("wifiTimer", pdMS_TO_TICKS(2000), pdFALSE, (void *)0, reinterpret_cast<TimerCallbackFunction_t>(wifiConnectSTA));
-
   // Se captura los eventos de la conexion wifi
   WiFi.onEvent(WiFiEvent);
 
@@ -54,25 +51,8 @@ void setup()
   // Iniciamos la conexion wifi como punto de acceso
   wifiConnectAP();
 
-  // Iniciamos la conexion wifi como cliente
-  wifiConnectSTA();
-
-  // Inicia el servidor web
+  // Inicia y configura el servidor web
   init_server();
-
-  // Configura el servidor web
-  serverHandlers();
-  DEBUG_PRINT("server");
-
-  // Inicia ElegantOTA
-  AsyncElegantOTA.begin(&server);
-
-  // Inicia el servidor
-  server.begin();
-
-  write_log("Servidor HTTP iniciado...");
-
-  DEBUG_PRINT("Servidor HTTP iniciado...");
 
   // Inicia la cola que almacena los datos a enviar por el puerto serie
   queue_serial_tx = xQueueCreate(20, sizeof(char) * 32);
@@ -94,6 +74,9 @@ void setup()
 
   // Inicia los pines usados para activas los dispositivos
   initPinDevice();
+
+  // Iniciamos la conexion wifi como cliente una vez iniciada todos los procesos a fin de evitar problemas en caso de que la red WiFi no este disponible
+  wifiConnectSTA();
 }
 
 void loop()
