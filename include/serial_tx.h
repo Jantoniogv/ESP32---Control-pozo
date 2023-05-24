@@ -22,11 +22,16 @@ void serial_tx(void *pvParameter)
         {
             data = String(data_buffer);
 
-            write_log(data);
+            // Borra el buffer en caso de tener algun byte en el
+            while (SerialCom.available())
+            {
+                SerialCom.read();
+            }
 
             SerialCom.print(data + "\n");
 
             DEBUG_PRINT("Serial_com_send: " + data);
+            write_log("Serial_com_send: " + data);
         }
 
         vTaskDelay(pdMS_TO_TICKS(50));

@@ -83,5 +83,12 @@ void loop()
 {
   serial_rx();
 
+   if (Serial.available())
+   {
+     String data = Serial.readString();
+
+     data_serial_receive_control(data);
+   }
+
   vTaskDelay(pdMS_TO_TICKS(1));
 }
