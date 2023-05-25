@@ -43,6 +43,11 @@ void current_measure()
     // calcula la corriente
     current = (avg_val - VAL_REFERENCE) * CURRENT_STEP;
 
+    if (current < 0)
+    {
+        current = 0;
+    }
+
     String topic_current = (String)intensidadMotor + "=" + (String)current;
 
     xQueueSend(queue_serial_tx, topic_current.c_str(), pdMS_TO_TICKS(100));
