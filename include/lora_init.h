@@ -37,7 +37,7 @@ void init_lora()
 
     write_log("LoRa iniciado...");
 
-    DEBUG_PRINT("Init LoRa ok");
+    DEBUG_PRINT("LoRa iniciado...");
 }
 
 #endif //_LORA_INIT_H

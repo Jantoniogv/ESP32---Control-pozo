@@ -113,8 +113,6 @@ void WiFiEvent(WiFiEvent_t event)
         write_log("WiFi lost connection");
 
         WiFi.reconnect();
-        // wifiConnectSTA();
-
         break;
     }
 }

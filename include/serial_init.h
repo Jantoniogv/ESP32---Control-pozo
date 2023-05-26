@@ -15,6 +15,8 @@ void serial_init()
     Serial.begin(115200);
 
     SerialCom.begin(115200, SERIAL_8N1, RS485_RX, RS485_TX);
+
+    DEBUG_PRINT("Serial iniciado...");
 }
 
 #endif //_SERIAL_INIT_H_

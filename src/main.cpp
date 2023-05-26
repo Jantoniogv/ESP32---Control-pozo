@@ -30,23 +30,14 @@ void setup()
   // Inicia la conexion serial
   serial_init();
 
-  DEBUG_PRINT("Serial iniciado...");
-
   // Inicia el modulo LoRa
   init_lora();
-
-  DEBUG_PRINT("LoRa iniciado...");
-
-  // Inicia el display OLED
-  // init_oled();
 
   // Se captura los eventos de la conexion wifi
   WiFi.onEvent(WiFiEvent);
 
   // Configuramos el modo del wifi
   WiFi.mode(configData.getWifiType());
-
-  Serial.println("wifi");
 
   // Iniciamos la conexion wifi como punto de acceso
   wifiConnectAP();
