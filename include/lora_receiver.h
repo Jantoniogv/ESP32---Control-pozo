@@ -53,7 +53,7 @@ void receiveDataLora(void *pvParameter)
         // Calcula la memoria libre que queda de esta tarea, a fin de calcular la memoria necesaria para ella
         // testMem("receiveDataLora");
 
-        vTaskDelay(pdMS_TO_TICKS(10));
+        vTaskDelay(pdMS_TO_TICKS(1));
     }
 }
 
