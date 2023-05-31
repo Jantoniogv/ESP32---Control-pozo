@@ -28,13 +28,17 @@ void serial_tx(void *pvParameter)
                 SerialCom.read();
             }
 
+            SerialCom.print("__recolector__basura__\n");
+
+            vTaskDelay(pdMS_TO_TICKS(100));
+
             SerialCom.print(data + "\n");
 
             DEBUG_PRINT("Serial_com_send: " + data);
             write_log("Serial_com_send: " + data);
         }
 
-        vTaskDelay(pdMS_TO_TICKS(50));
+        vTaskDelay(pdMS_TO_TICKS(100));
     }
 }
 
