@@ -5,6 +5,7 @@
 
 #include "serial_tx.h"
 #include "device.h"
+#include "config_init.h"
 
 #include "debug_utils.h"
 #define DEBUG
@@ -18,7 +19,7 @@ void data_lora_receive_control(String data)
     {
         DEBUG_PRINT(data);
 
-        xQueueSend(queue_serial_tx, data.c_str(), pdMS_TO_TICKS(100));
+        xQueueSend(queue_serial_tx, data.c_str(), pdMS_TO_TICKS(QUEQUE_TEMP_WAIT));
     }
 
     // Nivel del deposito huerto
@@ -26,7 +27,7 @@ void data_lora_receive_control(String data)
     {
         DEBUG_PRINT(data);
 
-        xQueueSend(queue_serial_tx, data.c_str(), pdMS_TO_TICKS(100));
+        xQueueSend(queue_serial_tx, data.c_str(), pdMS_TO_TICKS(QUEQUE_TEMP_WAIT));
     }
 
     // Estados electrovalvulas depositos de riego
@@ -34,28 +35,28 @@ void data_lora_receive_control(String data)
     {
         DEBUG_PRINT(data);
 
-        xQueueSend(queue_serial_tx, data.c_str(), pdMS_TO_TICKS(100));
+        xQueueSend(queue_serial_tx, data.c_str(), pdMS_TO_TICKS(QUEQUE_TEMP_WAIT));
     }
 
     if (data.indexOf((String)evDepHuertoSec2State) != -1)
     {
         DEBUG_PRINT(data);
 
-        xQueueSend(queue_serial_tx, data.c_str(), pdMS_TO_TICKS(100));
+        xQueueSend(queue_serial_tx, data.c_str(), pdMS_TO_TICKS(QUEQUE_TEMP_WAIT));
     }
 
     if (data.indexOf((String)evDepGaloBajoSec1State) != -1)
     {
         DEBUG_PRINT(data);
 
-        xQueueSend(queue_serial_tx, data.c_str(), pdMS_TO_TICKS(100));
+        xQueueSend(queue_serial_tx, data.c_str(), pdMS_TO_TICKS(QUEQUE_TEMP_WAIT));
     }
 
     if (data.indexOf((String)evDepGaloBajoSec2State) != -1)
     {
         DEBUG_PRINT(data);
 
-        xQueueSend(queue_serial_tx, data.c_str(), pdMS_TO_TICKS(100));
+        xQueueSend(queue_serial_tx, data.c_str(), pdMS_TO_TICKS(QUEQUE_TEMP_WAIT));
     }
 }
 

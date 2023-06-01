@@ -4,6 +4,9 @@
 
 #include <wifi.h>
 
+#define QUEQUE_TEMP_WAIT 5
+#define SERIAL_TX_TEMP_WAIT 100
+
 wifi_mode_t initWifiType = WIFI_MODE_APSTA;
 
 String initSsidSTA = "DIGIFIBRA-Ap99";

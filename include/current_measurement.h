@@ -55,7 +55,7 @@ void current_measure()
     if (elecVal.evDepGaloBajo || elecVal.evDepHuerto || elecVal.evCasa)
     {
         String topic_temp = (String)intensidadMotor + "=10";
-        xQueueSend(queue_serial_tx, topic_current.c_str(), pdMS_TO_TICKS(100));
+        xQueueSend(queue_serial_tx, topic_temp.c_str(), pdMS_TO_TICKS(QUEQUE_TEMP_WAIT));
     }
 
     DEBUG_PRINT((String)avg_val)

@@ -4,6 +4,7 @@
 #include <Arduino.h>
 
 #include "serial_init.h"
+#include "config_init.h"
 #include "log.h"
 
 #include "debug_utils.h"
@@ -18,11 +19,11 @@ void serial_tx(void *pvParameter)
     String data = "";
     for (;;)
     {
-        if (xQueueReceive(queue_serial_tx, &data_buffer, pdMS_TO_TICKS(100)) == pdTRUE)
+        if (xQueueReceive(queue_serial_tx, &data_buffer, pdMS_TO_TICKS(QUEQUE_TEMP_WAIT)) == pdTRUE)
         {
             data = String(data_buffer);
 
-            // Borra el buffer en caso de tener algun byte en el
+            // Borra el buffer en caso de tener algun byte corrupto en el
             while (SerialCom.available())
             {
                 SerialCom.read();
@@ -30,7 +31,7 @@ void serial_tx(void *pvParameter)
 
             SerialCom.print("__recolector__basura__\n");
 
-            vTaskDelay(pdMS_TO_TICKS(100));
+            vTaskDelay(pdMS_TO_TICKS(SERIAL_TX_TEMP_WAIT));
 
             SerialCom.print(data + "\n");
 
@@ -38,7 +39,7 @@ void serial_tx(void *pvParameter)
             write_log("Serial_com_send: " + data);
         }
 
-        vTaskDelay(pdMS_TO_TICKS(100));
+        vTaskDelay(pdMS_TO_TICKS(SERIAL_TX_TEMP_WAIT));
     }
 }
 

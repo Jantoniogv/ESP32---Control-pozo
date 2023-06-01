@@ -6,6 +6,7 @@
 #include "lora_send.h"
 #include "device.h"
 #include "serial_tx.h"
+#include "config_init.h"
 
 #include "debug_utils.h"
 #define DEBUG
@@ -65,7 +66,7 @@ void data_serial_receive_control(String data)
 
         send_state = (String)evDepGaloBajoState + "=" + payload;
 
-        xQueueSend(queue_serial_tx, send_state.c_str(), pdMS_TO_TICKS(100));
+        xQueueSend(queue_serial_tx, send_state.c_str(), pdMS_TO_TICKS(QUEQUE_TEMP_WAIT));
     }
 
     if (data.indexOf((String)evDepHuerto) != -1)
@@ -109,7 +110,7 @@ void data_serial_receive_control(String data)
 
         send_state = (String)evDepHuertoState + "=" + payload;
 
-        xQueueSend(queue_serial_tx, send_state.c_str(), pdMS_TO_TICKS(100));
+        xQueueSend(queue_serial_tx, send_state.c_str(), pdMS_TO_TICKS(QUEQUE_TEMP_WAIT));
     }
 
     if (data.indexOf((String)evCasa) != -1)
@@ -153,7 +154,7 @@ void data_serial_receive_control(String data)
 
         send_state = (String)evCasaState + "=" + payload;
 
-        xQueueSend(queue_serial_tx, send_state.c_str(), pdMS_TO_TICKS(100));
+        xQueueSend(queue_serial_tx, send_state.c_str(), pdMS_TO_TICKS(QUEQUE_TEMP_WAIT));
     }
 
     // Control de electrovalvulas del deposito de galo bajo
