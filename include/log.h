@@ -10,9 +10,6 @@ void write_log(String data)
 {
     String line;
 
-    /*  if (xSemaphoreTake(mutex_log_write, portMAX_DELAY) == pdTRUE)
-     { */
-
     if (_log.length() < 2000)
     {
         line = (String)millis() + ": " + data + "\n";
@@ -22,8 +19,6 @@ void write_log(String data)
     {
         _log.remove(0);
     }
-    /*  }
-     xSemaphoreGive(mutex_log_write); */
 }
 
 String read_log()

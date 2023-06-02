@@ -31,10 +31,6 @@ void init_lora()
             ;
     }
 
-    /*   LoRa.onReceive(receiveDataLora);
-      LoRa.receive();
-   */
-
     write_log("LoRa iniciado...");
 
     DEBUG_PRINT("LoRa iniciado...");
