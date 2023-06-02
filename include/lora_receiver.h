@@ -2,12 +2,11 @@
 #define _LORA_RECEIVER_H_
 #include <Arduino.h>
 
-#include "display_oled.h"
 #include "device_lora_handler.h"
 #include "log.h"
 
 #include "debug_utils.h"
-#define DEBUG
+// #define DEBUG
 
 /* void testMem(String taskName)
 {

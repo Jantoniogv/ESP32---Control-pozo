@@ -8,7 +8,7 @@
 #include "log.h"
 
 #include "debug_utils.h"
-#define DEBUG
+// #define DEBUG
 
 QueueHandle_t queue_serial_tx = 0;
 

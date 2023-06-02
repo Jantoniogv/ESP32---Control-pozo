@@ -9,7 +9,6 @@
 #include "server_functions.h"
 #include "lora_init.h"
 #include "lora_receiver.h"
-#include "display_oled.h"
 #include "serial_rx.h"
 #include "serial_tx.h"
 #include "device.h"
@@ -58,7 +57,7 @@ void setup()
   start_motor_timer = xTimerCreate("start_motor_timer", pdMS_TO_TICKS(17000), pdFALSE, (void *)0, reinterpret_cast<TimerCallbackFunction_t>(start_motor));
 
   // Iniciamos el temporizador encargado de medir la corriente del motor del pozo periodicamente
-  current_measure_timer = xTimerCreate("current_measure", pdMS_TO_TICKS(30000), pdTRUE, (void *)0, reinterpret_cast<TimerCallbackFunction_t>(current_measure));
+  current_measure_timer = xTimerCreate("current_measure", pdMS_TO_TICKS(10000), pdTRUE, (void *)0, reinterpret_cast<TimerCallbackFunction_t>(current_measure));
   xTimerStart(current_measure_timer, 0);
 
   write_log("Temporizador de medicion de la corriente iniciado...");
@@ -74,12 +73,12 @@ void loop()
 {
   serial_rx();
 
-   if (Serial.available())
-   {
-     String data = Serial.readString();
+  /*    if (Serial.available())
+     {
+       String data = Serial.readString();
 
-     data_serial_receive_control(data);
-   }
+       data_serial_receive_control(data);
+     } */
 
   vTaskDelay(pdMS_TO_TICKS(1));
 }

@@ -8,7 +8,7 @@
 #include "config_init.h"
 
 #include "debug_utils.h"
-#define DEBUG
+// #define DEBUG
 
 // void data_lora_receive_control(String data)
 void data_lora_receive_control(String data)

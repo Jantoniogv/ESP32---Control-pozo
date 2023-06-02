@@ -4,9 +4,10 @@
 #include "Arduino.h"
 
 #include "lora_send.h"
+#include "serial_tx.h"
 
 #include "debug_utils.h"
-#define DEBUG
+// #define DEBUG
 
 // Estado de cada electrovalvula
 struct elecVal
@@ -77,6 +78,16 @@ void initPinDevice()
     // Inicializa pin casa
     pinMode(EV_CASA, OUTPUT);
     digitalWrite(EV_CASA, HIGH);
+
+    // Envia estados iniciales
+    String state_init = (String)evDepGaloBajoState + "=OFF";
+    xQueueSend(queue_serial_tx, state_init.c_str(), pdMS_TO_TICKS(QUEQUE_TEMP_WAIT));
+
+    state_init = (String)evDepHuertoState + "=OFF";
+    xQueueSend(queue_serial_tx, state_init.c_str(), pdMS_TO_TICKS(QUEQUE_TEMP_WAIT));
+
+    state_init = (String)evCasaState + "=OFF";
+    xQueueSend(queue_serial_tx, state_init.c_str(), pdMS_TO_TICKS(QUEQUE_TEMP_WAIT));
 
     DEBUG_PRINT("Pines de las electrovalvulas y motor iniciados...");
 

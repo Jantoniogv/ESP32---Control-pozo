@@ -7,7 +7,7 @@
 #include "device.h"
 
 #include "debug_utils.h"
-#define DEBUG
+// #define DEBUG
 
 #define PIN_CURRENT_MEASURE 36
 
@@ -55,6 +55,11 @@ void current_measure()
     if (elecVal.evDepGaloBajo || elecVal.evDepHuerto || elecVal.evCasa)
     {
         String topic_temp = (String)intensidadMotor + "=10";
+        xQueueSend(queue_serial_tx, topic_temp.c_str(), pdMS_TO_TICKS(QUEQUE_TEMP_WAIT));
+    }
+    else
+    {
+        String topic_temp = (String)intensidadMotor + "=0";
         xQueueSend(queue_serial_tx, topic_temp.c_str(), pdMS_TO_TICKS(QUEQUE_TEMP_WAIT));
     }
 

@@ -9,7 +9,7 @@
 #include "config_init.h"
 
 #include "debug_utils.h"
-#define DEBUG
+// #define DEBUG
 
 // Declara le controlador del temporizador de la medida de la corriente
 TimerHandle_t start_motor_timer;
