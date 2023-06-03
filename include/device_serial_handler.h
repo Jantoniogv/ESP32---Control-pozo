@@ -41,7 +41,7 @@ void data_serial_receive_control(String data)
             // Marca el estado de la valvula
             elecVal.evDepGaloBajo = true;
 
-            xTimerStart(start_motor_timer, 0);
+            xTimerStart(start_motor_timer, pdMS_TO_TICKS(TIMER_START_STOP_WAIT));
         }
         else if (payload == OFF)
         {
@@ -51,7 +51,7 @@ void data_serial_receive_control(String data)
             if (elecVal.evCasa == false && elecVal.evDepHuerto == false)
             {
                 // Se para el motor y se asegura que el timer este parado
-                xTimerStop(start_motor_timer, 0);
+                xTimerStop(start_motor_timer, pdMS_TO_TICKS(TIMER_START_STOP_WAIT));
 
                 digitalWrite(MOTOR, HIGH);
             }
@@ -85,7 +85,7 @@ void data_serial_receive_control(String data)
             // Marca el estado de la valvula
             elecVal.evDepHuerto = true;
 
-            xTimerStart(start_motor_timer, 0);
+            xTimerStart(start_motor_timer, pdMS_TO_TICKS(TIMER_START_STOP_WAIT));
         }
         else if (payload == OFF)
         {
@@ -95,7 +95,7 @@ void data_serial_receive_control(String data)
             if (elecVal.evCasa == false && elecVal.evDepGaloBajo == false)
             {
                 // Se para el motor y se asegura que el timer este parado
-                xTimerStop(start_motor_timer, 0);
+                xTimerStop(start_motor_timer, pdMS_TO_TICKS(TIMER_START_STOP_WAIT));
 
                 digitalWrite(MOTOR, HIGH);
             }
@@ -129,7 +129,7 @@ void data_serial_receive_control(String data)
             // Marca el estado de la valvula
             elecVal.evCasa = true;
 
-            xTimerStart(start_motor_timer, 0);
+            xTimerStart(start_motor_timer, pdMS_TO_TICKS(TIMER_START_STOP_WAIT));
         }
         else if (payload == OFF)
         {
@@ -139,7 +139,7 @@ void data_serial_receive_control(String data)
             if (elecVal.evDepGaloBajo == false && elecVal.evDepHuerto == false)
             {
                 // Se para el motor y se asegura que el timer este parado
-                xTimerStop(start_motor_timer, 0);
+                xTimerStop(start_motor_timer, pdMS_TO_TICKS(TIMER_START_STOP_WAIT));
 
                 digitalWrite(MOTOR, HIGH);
             }
