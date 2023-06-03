@@ -58,7 +58,7 @@ void setup()
 
   // Iniciamos el temporizador encargado de medir la corriente del motor del pozo periodicamente
   current_measure_timer = xTimerCreate("current_measure", pdMS_TO_TICKS(10000), pdTRUE, (void *)0, reinterpret_cast<TimerCallbackFunction_t>(current_measure));
-  // xTimerStart(current_measure_timer, pdMS_TO_TICKS(TIMER_START_STOP_WAIT));
+  xTimerStart(current_measure_timer, pdMS_TO_TICKS(TIMER_START_STOP_WAIT));
 
   write_log("Temporizador de medicion de la corriente iniciado...");
 
