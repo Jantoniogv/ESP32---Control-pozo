@@ -11,7 +11,7 @@
 
 #define PIN_CURRENT_MEASURE 36
 
-#define N_SAMPLES 100
+#define N_SAMPLES 6000
 #define VAL_REFERENCE 2048
 #define CURRENT_STEP 0.01626
 
@@ -25,28 +25,32 @@ void current_measure()
 
     int val[N_SAMPLES];
 
-    float avg_val = 0;
+    float max_val = 0;
 
     for (int i = 0; i < N_SAMPLES; i++)
     {
         val[i] = analogRead(PIN_CURRENT_MEASURE);
+
+        // Busca el valor maximo medido
+        if (max_val < val[i])
+        {
+            max_val = val[i];
+        }
     }
 
-    // Calcula el valor medio medido
-    for (int i = 0; i < N_SAMPLES; i++)
+    // Corrige posibles valores extremos
+    if (max_val > 4096)
     {
-        avg_val += val[i];
+        max_val = 4096;
     }
 
-    avg_val = avg_val / N_SAMPLES;
+    if (max_val < 2048)
+    {
+        max_val = 0;
+    }
 
     // calcula la corriente
-    current = (avg_val - VAL_REFERENCE) * CURRENT_STEP;
-
-    if (current < 0)
-    {
-        current = 0;
-    }
+    current = (max_val - VAL_REFERENCE) * CURRENT_STEP;
 
     String topic_current = (String)intensidadMotor + "=" + (String)current;
 
@@ -63,10 +67,10 @@ void current_measure()
         xQueueSend(queue_serial_tx, topic_temp.c_str(), pdMS_TO_TICKS(QUEQUE_TEMP_WAIT));
     }
 
-    DEBUG_PRINT((String)avg_val)
+    DEBUG_PRINT((String)max_val);
 
     DEBUG_PRINT("Corriente electrica:");
-    DEBUG_PRINT((String)current)
+    DEBUG_PRINT((String)current);
 }
 
 #endif // _CURRENT_MEASUREMENT_H
