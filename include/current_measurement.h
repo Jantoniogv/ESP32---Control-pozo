@@ -5,6 +5,7 @@
 
 #include "serial_tx.h"
 #include "device.h"
+#include "log.h"
 
 #include "debug_utils.h"
 // #define DEBUG
@@ -68,9 +69,10 @@ void current_measure()
     }
 
     DEBUG_PRINT((String)max_val);
+    write_log("Max valor medido: " + (String)max_val);
 
-    DEBUG_PRINT("Corriente electrica:");
-    DEBUG_PRINT((String)current);
+    DEBUG_PRINT("Corriente electrica: " + (String)current);
+    write_log("Corriente electrica: " + (String)current);
 }
 
 #endif // _CURRENT_MEASUREMENT_H
