@@ -12,9 +12,10 @@
 
 #define PIN_CURRENT_MEASURE 36
 
-#define N_SAMPLES 6000
-#define VAL_REFERENCE 2048
-#define CURRENT_STEP 0.01626
+#define N_SAMPLES 10000       // Numero de muestras tomadas
+#define VAL_REFERENCE 2048    // 2048 es el valor teorico medido cuando la corriente es 0 y el voltaje seria 1,66 V, 0 seria el valor leido cuando la corriente pasa por el maximo negativo
+#define CURRENT_STEP 0.01626  // Amperios cada punto leido analogico leido
+#define FACTOR_RAIZ_DOS 0.707 // Valor resultante de dividir 1 entre raiz cuadrada de 2
 
 // Declara le controlador del temporizador de la medida de la corriente
 TimerHandle_t current_measure_timer;
@@ -24,18 +25,18 @@ void current_measure()
 {
     float current;
 
-    int val[N_SAMPLES];
+    int val;
 
     float max_val = 0;
 
     for (int i = 0; i < N_SAMPLES; i++)
     {
-        val[i] = analogRead(PIN_CURRENT_MEASURE);
+        val = analogRead(PIN_CURRENT_MEASURE);
 
         // Busca el valor maximo medido
-        if (max_val < val[i])
+        if (max_val < val)
         {
-            max_val = val[i];
+            max_val = val;
         }
     }
 
@@ -51,7 +52,7 @@ void current_measure()
     }
 
     // calcula la corriente
-    current = (max_val - VAL_REFERENCE) * CURRENT_STEP;
+    current = (max_val - VAL_REFERENCE) * CURRENT_STEP * FACTOR_RAIZ_DOS;
 
     String topic_current = (String)intensidadMotor + "=" + (String)current;
 
