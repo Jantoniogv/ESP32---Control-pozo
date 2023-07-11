@@ -10,10 +10,12 @@
 #include "debug_utils.h"
 // #define DEBUG
 
-#define PIN_CURRENT_MEASURE 36
+#define PIN_CURRENT_MEASURE 36 // Pin toma datos analogicos
 
-#define N_SAMPLES 10000       // Numero de muestras tomadas
-#define VAL_REFERENCE 2048    // 2048 es el valor teorico medido cuando la corriente es 0 y el voltaje seria 1,66 V, 0 seria el valor leido cuando la corriente pasa por el maximo negativo
+#define N_SAMPLES 2000        // Numero de muestras tomadas
+#define N_SAMPLES_AVG 10      // Numero de muestras en un instante dado, a fin de tomar la media de estas 10 para una de cada muestra total
+#define VAL_REFERENCE 1865    // 1860 es el valor teorico medido cuando la corriente es 0 y el voltaje seria 1,66 V
+#define VAL_MAX 4096          // 4096 es el valor maximo que debe de medir el ADC
 #define CURRENT_STEP 0.01626  // Amperios cada punto leido analogico leido
 #define FACTOR_RAIZ_DOS 0.707 // Valor resultante de dividir 1 entre raiz cuadrada de 2
 
@@ -25,49 +27,45 @@ void current_measure()
 {
     float current;
 
-    int val;
+    int max_val = 0;
 
-    float max_val = 0;
+    int val = 0;
 
     for (int i = 0; i < N_SAMPLES; i++)
     {
-        val = analogRead(PIN_CURRENT_MEASURE);
+
+        for (int j = 0; j < N_SAMPLES_AVG; j++)
+        {
+            val += analogRead(PIN_CURRENT_MEASURE);
+        }
+        val = val / N_SAMPLES_AVG;
 
         // Busca el valor maximo medido
         if (max_val < val)
         {
             max_val = val;
         }
+
+        DEBUG_PRINT(val);
+
+        val = 0;
+
+        vTaskDelay(pdMS_TO_TICKS(1));
     }
 
     // Corrige posibles valores extremos
-    if (max_val > 4096)
+    if (max_val > VAL_MAX)
     {
-        max_val = 4096;
+        max_val = VAL_MAX;
     }
 
-    if (max_val < 2048)
+    if (max_val < VAL_REFERENCE)
     {
-        max_val = 0;
+        max_val = VAL_REFERENCE;
     }
 
     // calcula la corriente
     current = (max_val - VAL_REFERENCE) * CURRENT_STEP * FACTOR_RAIZ_DOS;
-
-    String topic_current = (String)intensidadMotor + "=" + (String)current;
-
-    // xQueueSend(queue_serial_tx, topic_current.c_str(), pdMS_TO_TICKS(100));
-
-    if (elecVal.evDepGaloBajo || elecVal.evDepHuerto || elecVal.evCasa)
-    {
-        String topic_temp = (String)intensidadMotor + "=10";
-        xQueueSend(queue_serial_tx, topic_temp.c_str(), pdMS_TO_TICKS(QUEQUE_TEMP_WAIT));
-    }
-    else
-    {
-        String topic_temp = (String)intensidadMotor + "=0";
-        xQueueSend(queue_serial_tx, topic_temp.c_str(), pdMS_TO_TICKS(QUEQUE_TEMP_WAIT));
-    }
 
     DEBUG_PRINT((String)max_val);
     write_log("Max valor medido: " + (String)max_val);
@@ -77,3 +75,4 @@ void current_measure()
 }
 
 #endif // _CURRENT_MEASUREMENT_H
+
