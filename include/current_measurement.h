@@ -10,11 +10,11 @@
 #include "debug_utils.h"
 // #define DEBUG
 
-#define PIN_CURRENT_MEASURE 36 // Pin toma datos analogicos
+#define PIN_CURRENT_MEASURE 39 // Pin toma datos analogicos
 
 #define N_SAMPLES 2000        // Numero de muestras tomadas
 #define N_SAMPLES_AVG 10      // Numero de muestras en un instante dado, a fin de tomar la media de estas 10 para una de cada muestra total
-#define VAL_REFERENCE 1865    // 1860 es el valor teorico medido cuando la corriente es 0 y el voltaje seria 1,66 V
+#define VAL_REFERENCE 2100    // 1860 es el valor teorico medido cuando la corriente es 0 y el voltaje seria 1,66 V
 #define VAL_MAX 4096          // 4096 es el valor maximo que debe de medir el ADC
 #define CURRENT_STEP 0.01626  // Amperios cada punto leido analogico leido
 #define FACTOR_RAIZ_DOS 0.707 // Valor resultante de dividir 1 entre raiz cuadrada de 2
@@ -67,6 +67,14 @@ void current_measure()
     // calcula la corriente
     current = (max_val - VAL_REFERENCE) * CURRENT_STEP * FACTOR_RAIZ_DOS;
 
+    // Envia los datos por el puerto serie
+    String send_state = "";
+
+    send_state = (String)evDepGaloBajoState + "=" + String(current);
+
+    xQueueSend(queue_serial_tx, send_state.c_str(), pdMS_TO_TICKS(QUEQUE_TEMP_WAIT));
+
+    // Registra los log y imprime en monitor serie en caso de debug
     DEBUG_PRINT((String)max_val);
     write_log("Max valor medido: " + (String)max_val);
 
