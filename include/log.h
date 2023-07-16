@@ -25,8 +25,6 @@ String read_log()
 {
 
     return _log;
-
-    return "";
 }
 
 #endif //_LOG_H_

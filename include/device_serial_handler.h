@@ -7,6 +7,7 @@
 #include "device.h"
 #include "serial_tx.h"
 #include "config_init.h"
+#include "log.h"
 
 #include "debug_utils.h"
 // #define DEBUG
@@ -20,9 +21,44 @@ void start_motor()
     digitalWrite(MOTOR, LOW);
 }
 
+// Comprueba el tipo de mensage recibido y lo gestiona segun su funcion
 void data_serial_receive_control(String data)
 {
     String send_state = "";
+
+    // Control del arranque del motor
+    if (data.indexOf((String)power_motor) != -1)
+    {
+        String payload = data.substring(data.indexOf("=") + 1);
+
+        DEBUG_PRINT(data);
+
+        if (payload == ON && elecVal.motor == false)
+        {
+            DEBUG_PRINT("Motor=ON");
+
+            // Arranca el motor
+            xTimerStart(start_motor_timer, pdMS_TO_TICKS(TIMER_START_STOP_WAIT));
+
+            // Marca el estado de la valvula
+            elecVal.motor = true;
+        }
+        else if (payload == OFF)
+        {
+            DEBUG_PRINT("Motor=OFF");
+
+            // Se para el motor y se asegura que el timer este parado
+            xTimerStop(start_motor_timer, pdMS_TO_TICKS(TIMER_START_STOP_WAIT));
+
+            digitalWrite(MOTOR, HIGH);
+
+            elecVal.motor = false;
+        }
+
+        send_state = (String)power_motor_state + "=" + payload;
+
+        xQueueSend(queue_serial_tx, send_state.c_str(), pdMS_TO_TICKS(QUEQUE_TEMP_WAIT));
+    }
 
     // Control de las valvulas motorizadas del pozo
     if (data.indexOf((String)evDepGaloBajo) != -1)
@@ -40,8 +76,6 @@ void data_serial_receive_control(String data)
 
             // Marca el estado de la valvula
             elecVal.evDepGaloBajo = true;
-
-            xTimerStart(start_motor_timer, pdMS_TO_TICKS(TIMER_START_STOP_WAIT));
         }
         else if (payload == OFF)
         {
@@ -61,8 +95,6 @@ void data_serial_receive_control(String data)
 
             elecVal.evDepGaloBajo = false;
         }
-
-        // serial_tx((String)evDepGaloBajoState + "=" + payload);
 
         send_state = (String)evDepGaloBajoState + "=" + payload;
 
@@ -84,8 +116,6 @@ void data_serial_receive_control(String data)
 
             // Marca el estado de la valvula
             elecVal.evDepHuerto = true;
-
-            xTimerStart(start_motor_timer, pdMS_TO_TICKS(TIMER_START_STOP_WAIT));
         }
         else if (payload == OFF)
         {
@@ -105,8 +135,6 @@ void data_serial_receive_control(String data)
 
             elecVal.evDepHuerto = false;
         }
-
-        // serial_tx((String)evDepHuertoState + "=" + payload);
 
         send_state = (String)evDepHuertoState + "=" + payload;
 
@@ -128,8 +156,6 @@ void data_serial_receive_control(String data)
 
             // Marca el estado de la valvula
             elecVal.evCasa = true;
-
-            xTimerStart(start_motor_timer, pdMS_TO_TICKS(TIMER_START_STOP_WAIT));
         }
         else if (payload == OFF)
         {
@@ -149,8 +175,6 @@ void data_serial_receive_control(String data)
 
             elecVal.evCasa = false;
         }
-
-        // serial_tx((String)evCasaState + "=" + payload);
 
         send_state = (String)evCasaState + "=" + payload;
 
@@ -177,6 +201,26 @@ void data_serial_receive_control(String data)
     if (data.indexOf((String)evDepHuertoSec2) != -1)
     {
         sendDataLora(data);
+    }
+
+    // Reiniciar ESP32
+    if (data.indexOf((String)restart_pozo_galo_bajo) != -1)
+    {
+        send_state = (String)restart_pozo_galo_bajo_state + "=OK";
+
+        xQueueSend(queue_serial_tx, send_state.c_str(), pdMS_TO_TICKS(QUEQUE_TEMP_WAIT));
+
+        vTaskDelay(pdTICKS_TO_MS(1000));
+
+        ESP.restart();
+    }
+
+    // Enviar log
+    if (data.indexOf((String)log_pozo_galo_bajo_state) != -1)
+    {
+        send_state = (String)log_pozo_galo_bajo_state + "=" + read_log();
+
+        xQueueSend(queue_serial_tx, send_state.c_str(), pdMS_TO_TICKS(QUEQUE_TEMP_WAIT));
     }
 }
 
