@@ -216,7 +216,7 @@ void data_serial_receive_control(String data)
     }
 
     // Enviar log
-    if (data.indexOf((String)log_pozo_galo_bajo_state) != -1)
+    if (data.indexOf((String)log_pozo_galo_bajo) != -1)
     {
         send_state = (String)log_pozo_galo_bajo_state + "=" + read_log();
 
