@@ -4,6 +4,7 @@
 // #include <Wire.h>
 
 #include "config.h"
+#include "timer_restart.h"
 #include "serial_init.h"
 #include "wifi_functions.h"
 #include "server_functions.h"
@@ -52,6 +53,9 @@ void setup()
 
   // Inicia la tarea que recibe los datos por LoRa
   xTaskCreatePinnedToCore(receiveDataLora, "loraData", 2048, nullptr, 0, nullptr, 1);
+
+  // Iniciamos el temporizador encargado de medir la corriente del motor del pozo periodicamente
+  timer_restart = xTimerCreate("timer_restart", pdMS_TO_TICKS(2000), pdFALSE, (void *)0, reinterpret_cast<TimerCallbackFunction_t>(restart_ESP32));
 
   // Iniciamos el temporizador encargado de medir la corriente del motor del pozo periodicamente
   start_motor_timer = xTimerCreate("start_motor_timer", pdMS_TO_TICKS(17000), pdFALSE, (void *)0, reinterpret_cast<TimerCallbackFunction_t>(start_motor));

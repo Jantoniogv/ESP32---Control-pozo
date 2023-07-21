@@ -8,6 +8,7 @@
 #include "serial_tx.h"
 #include "config_init.h"
 #include "log.h"
+#include "timer_restart.h"
 
 #include "debug_utils.h"
 // #define DEBUG
@@ -210,9 +211,7 @@ void data_serial_receive_control(String data)
 
         xQueueSend(queue_serial_tx, send_state.c_str(), pdMS_TO_TICKS(QUEQUE_TEMP_WAIT));
 
-        vTaskDelay(pdTICKS_TO_MS(1000));
-
-        ESP.restart();
+         xTimerStart(timer_restart, pdMS_TO_TICKS(TIMER_START_STOP_WAIT));
     }
 
     // Enviar log
