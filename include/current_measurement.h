@@ -20,7 +20,7 @@
 #define FACTOR_RAIZ_DOS 0.707 // Valor resultante de dividir 1 entre raiz cuadrada de 2
 
 // Declara le controlador del temporizador de la medida de la corriente
-TimerHandle_t current_measure_timer;
+TimerHandle_t timer_current_measure;
 
 // Se encarga de tomar la medida de la corriente y enviarla por el puerto serie
 void current_measure()

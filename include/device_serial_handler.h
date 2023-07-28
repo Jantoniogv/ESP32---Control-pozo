@@ -14,7 +14,7 @@
 // #define DEBUG
 
 // Declara le controlador del temporizador de la medida de la corriente
-TimerHandle_t start_motor_timer;
+TimerHandle_t timer_start_motor;
 
 // Se encarga de tomar la medida de la corriente y enviarla por el puerto serie
 void start_motor()
@@ -39,7 +39,7 @@ void data_serial_receive_control(String data)
             DEBUG_PRINT("Motor=ON");
 
             // Arranca el motor
-            xTimerStart(start_motor_timer, pdMS_TO_TICKS(TIMER_START_STOP_WAIT));
+            xTimerStart(timer_start_motor, pdMS_TO_TICKS(TIMER_START_STOP_WAIT));
 
             // Marca el estado de la valvula
             elecVal.motor = true;
@@ -49,7 +49,7 @@ void data_serial_receive_control(String data)
             DEBUG_PRINT("Motor=OFF");
 
             // Se para el motor y se asegura que el timer este parado
-            xTimerStop(start_motor_timer, pdMS_TO_TICKS(TIMER_START_STOP_WAIT));
+            xTimerStop(timer_start_motor, pdMS_TO_TICKS(TIMER_START_STOP_WAIT));
 
             digitalWrite(MOTOR, HIGH);
 
@@ -86,9 +86,13 @@ void data_serial_receive_control(String data)
             if (elecVal.evCasa == false && elecVal.evDepHuerto == false)
             {
                 // Se para el motor y se asegura que el timer este parado
-                xTimerStop(start_motor_timer, pdMS_TO_TICKS(TIMER_START_STOP_WAIT));
+                xTimerStop(timer_start_motor, pdMS_TO_TICKS(TIMER_START_STOP_WAIT));
 
                 digitalWrite(MOTOR, HIGH);
+
+                send_state = (String)power_motor_state + "=" + payload;
+
+                xQueueSend(queue_serial_tx, send_state.c_str(), pdMS_TO_TICKS(QUEQUE_TEMP_WAIT));
             }
 
             // Cierra la valvula
@@ -126,9 +130,13 @@ void data_serial_receive_control(String data)
             if (elecVal.evCasa == false && elecVal.evDepGaloBajo == false)
             {
                 // Se para el motor y se asegura que el timer este parado
-                xTimerStop(start_motor_timer, pdMS_TO_TICKS(TIMER_START_STOP_WAIT));
+                xTimerStop(timer_start_motor, pdMS_TO_TICKS(TIMER_START_STOP_WAIT));
 
                 digitalWrite(MOTOR, HIGH);
+
+                send_state = (String)power_motor_state + "=" + payload;
+
+                xQueueSend(queue_serial_tx, send_state.c_str(), pdMS_TO_TICKS(QUEQUE_TEMP_WAIT));
             }
 
             // Cierra la valvula
@@ -166,9 +174,13 @@ void data_serial_receive_control(String data)
             if (elecVal.evDepGaloBajo == false && elecVal.evDepHuerto == false)
             {
                 // Se para el motor y se asegura que el timer este parado
-                xTimerStop(start_motor_timer, pdMS_TO_TICKS(TIMER_START_STOP_WAIT));
+                xTimerStop(timer_start_motor, pdMS_TO_TICKS(TIMER_START_STOP_WAIT));
 
                 digitalWrite(MOTOR, HIGH);
+
+                send_state = (String)power_motor_state + "=" + payload;
+
+                xQueueSend(queue_serial_tx, send_state.c_str(), pdMS_TO_TICKS(QUEQUE_TEMP_WAIT));
             }
 
             // Cierra la valvula
@@ -207,19 +219,11 @@ void data_serial_receive_control(String data)
     // Reiniciar ESP32
     if (data.indexOf((String)restart_pozo_galo_bajo) != -1)
     {
-        send_state = (String)restart_pozo_galo_bajo_state + "=OK";
+        send_state = (String)restart_pozo_galo_bajo_state + "=" + ON;
 
         xQueueSend(queue_serial_tx, send_state.c_str(), pdMS_TO_TICKS(QUEQUE_TEMP_WAIT));
 
-         xTimerStart(timer_restart, pdMS_TO_TICKS(TIMER_START_STOP_WAIT));
-    }
-
-    // Enviar log
-    if (data.indexOf((String)log_pozo_galo_bajo) != -1)
-    {
-        send_state = (String)log_pozo_galo_bajo_state + "=" + read_log();
-
-        xQueueSend(queue_serial_tx, send_state.c_str(), pdMS_TO_TICKS(QUEQUE_TEMP_WAIT));
+        xTimerStart(timer_restart, pdMS_TO_TICKS(TIMER_START_STOP_WAIT));
     }
 }
 

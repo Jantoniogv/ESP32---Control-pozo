@@ -55,14 +55,14 @@ void setup()
   xTaskCreatePinnedToCore(receiveDataLora, "loraData", 2048, nullptr, 0, nullptr, 1);
 
   // Iniciamos el temporizador encargado de medir la corriente del motor del pozo periodicamente
-  timer_restart = xTimerCreate("timer_restart", pdMS_TO_TICKS(2000), pdFALSE, (void *)0, reinterpret_cast<TimerCallbackFunction_t>(restart_ESP32));
+  timer_restart = xTimerCreate("timer_restart", pdMS_TO_TICKS(TIME_TIMER_RESTART), pdFALSE, (void *)0, reinterpret_cast<TimerCallbackFunction_t>(restart_ESP32));
 
   // Iniciamos el temporizador encargado de medir la corriente del motor del pozo periodicamente
-  start_motor_timer = xTimerCreate("start_motor_timer", pdMS_TO_TICKS(17000), pdFALSE, (void *)0, reinterpret_cast<TimerCallbackFunction_t>(start_motor));
+  timer_start_motor = xTimerCreate("timer_start_motor", pdMS_TO_TICKS(TIME_TIMER_START_MOTOR), pdFALSE, (void *)0, reinterpret_cast<TimerCallbackFunction_t>(start_motor));
 
   // Iniciamos el temporizador encargado de medir la corriente del motor del pozo periodicamente
-  current_measure_timer = xTimerCreate("current_measure", pdMS_TO_TICKS(10000), pdTRUE, (void *)0, reinterpret_cast<TimerCallbackFunction_t>(current_measure));
-  xTimerStart(current_measure_timer, pdMS_TO_TICKS(TIMER_START_STOP_WAIT));
+  timer_current_measure = xTimerCreate("timer_current_measure", pdMS_TO_TICKS(TIME_TIMER_MEASURE_CURRENT), pdTRUE, (void *)0, reinterpret_cast<TimerCallbackFunction_t>(current_measure));
+  xTimerStart(timer_current_measure, pdMS_TO_TICKS(TIMER_START_STOP_WAIT));
 
   write_log("Temporizador de medicion de la corriente iniciado...");
 
