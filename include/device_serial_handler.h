@@ -5,7 +5,6 @@
 
 #include "lora_send.h"
 #include "device.h"
-#include "fan.h"
 #include "serial_tx.h"
 #include "config_init.h"
 #include "log.h"

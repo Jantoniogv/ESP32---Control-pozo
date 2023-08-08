@@ -30,6 +30,8 @@ struct elecVal
 
 #define MOTOR 25
 
+#define FAN 23
+
 #define ON "ON"
 
 #define OFF "OFF"
@@ -98,6 +100,10 @@ void initPinDevice()
     pinMode(EV_CASA, OUTPUT);
     digitalWrite(EV_CASA, HIGH);
 
+    // Inicializa pin ventilador
+    pinMode(FAN, OUTPUT);
+    digitalWrite(EV_CASA, LOW);
+
     // Envia estados iniciales
     String state_init = (String)power_motor_state + "=OFF";
     xQueueSend(queue_serial_tx, state_init.c_str(), pdMS_TO_TICKS(QUEQUE_TEMP_WAIT));
@@ -111,10 +117,13 @@ void initPinDevice()
     state_init = (String)evCasaState + "=OFF";
     xQueueSend(queue_serial_tx, state_init.c_str(), pdMS_TO_TICKS(QUEQUE_TEMP_WAIT));
 
-    DEBUG_PRINT("Pines de las electrovalvulas y motor iniciados...");
+    state_init = (String)dev_fan + "=OFF";
+    xQueueSend(queue_serial_tx, state_init.c_str(), pdMS_TO_TICKS(QUEQUE_TEMP_WAIT));
+
+    DEBUG_PRINT("Pines de las electrovalvulas, motor y ventilador iniciados...");
 
     // Escribe en el log inicializacion de los pines
-    write_log("Pines de las electrovalvulas y motor iniciados...");
+    write_log("Pines de las electrovalvulas, motor y ventilador iniciados...");
 }
 
 #endif // _DEVICE_H_

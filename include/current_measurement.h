@@ -50,11 +50,6 @@ void current_measure()
         if (max_val < val)
         {
             max_val = val;
-            max_is = true;
-        }
-        else
-        {
-            min_val = val;
         } */
 
         for (int j = 0; j < N_SAMPLES_AVG; j++)
@@ -83,20 +78,19 @@ void current_measure()
 
     current = sqrt(val_cuadrado / N_SAMPLES) * CURRENT_STEP;
 
-    /*    // Corrige posibles valores extremos
-       if (max_val > VAL_MAX)
-       {
-           max_val = VAL_MAX;
-       }
+    /* // Corrige posibles valores extremos
+    if (max_val > VAL_MAX)
+    {
+        max_val = VAL_MAX;
+    }
 
-       if (max_val < VAL_REFERENCE)
-       {
-           max_val = VAL_REFERENCE;
-       }
+    if (max_val < VAL_REFERENCE)
+    {
+        max_val = VAL_REFERENCE;
+    }
 
-       // calcula la corriente
-       current = (max_val - VAL_REFERENCE) * CURRENT_STEP * FACTOR_RAIZ_DOS;
-   */
+    // calcula la corriente
+    current = (max_val - VAL_REFERENCE) * CURRENT_STEP * FACTOR_RAIZ_DOS; */
 
     // Envia los datos por el puerto serie
     String send_current = "";
