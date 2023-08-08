@@ -14,7 +14,7 @@
 
 #define N_SAMPLES 2000        // Numero de muestras tomadas
 #define N_SAMPLES_AVG 10      // Numero de muestras en un instante dado, a fin de tomar la media de estas 10 para una de cada muestra total
-#define VAL_REFERENCE 2048    // 1860 es el valor teorico medido cuando la corriente es 0 y el voltaje seria 1,66 V
+#define VAL_REFERENCE 2048    // 2048 es el valor teorico medido cuando la corriente es 0 y el voltaje seria 1,66 V
 #define VAL_MAX 4096          // 4096 es el valor maximo que debe de medir el ADC
 #define CURRENT_STEP 0.01626  // Amperios cada punto leido analogico leido
 #define FACTOR_RAIZ_DOS 0.707 // Valor resultante de dividir 1 entre raiz cuadrada de 2
@@ -25,16 +25,22 @@ TimerHandle_t timer_current_measure;
 // Se encarga de tomar la medida de la corriente y enviarla por el puerto serie
 void current_measure()
 {
-    float current;
+    double current;
 
     int max_val = 0;
 
+    int min_val = 0;
+
+    bool max_is = false;
+
     int val = 0;
+
+    double val_cuadrado = 0;
 
     for (int i = 0; i < N_SAMPLES; i++)
     {
 
-        for (int j = 0; j < N_SAMPLES_AVG; j++)
+        /* for (int j = 0; j < N_SAMPLES_AVG; j++)
         {
             val += analogRead(PIN_CURRENT_MEASURE);
         }
@@ -44,6 +50,28 @@ void current_measure()
         if (max_val < val)
         {
             max_val = val;
+            max_is = true;
+        }
+        else
+        {
+            min_val = val;
+        } */
+
+        for (int j = 0; j < N_SAMPLES_AVG; j++)
+        {
+            val += analogRead(PIN_CURRENT_MEASURE);
+        }
+
+        val = (val - VAL_REFERENCE) / N_SAMPLES_AVG;
+
+        val_cuadrado += val * val;
+
+        // Busca el valor maximo medido
+        if (max_val < val)
+        {
+            max_val = val;
+
+            // max_is = true;
         }
 
         DEBUG_PRINT(val);
@@ -53,19 +81,22 @@ void current_measure()
         vTaskDelay(pdMS_TO_TICKS(1));
     }
 
-    // Corrige posibles valores extremos
-    if (max_val > VAL_MAX)
-    {
-        max_val = VAL_MAX;
-    }
+    current = sqrt(val_cuadrado / N_SAMPLES) * CURRENT_STEP;
 
-    if (max_val < VAL_REFERENCE)
-    {
-        max_val = VAL_REFERENCE;
-    }
+    /*    // Corrige posibles valores extremos
+       if (max_val > VAL_MAX)
+       {
+           max_val = VAL_MAX;
+       }
 
-    // calcula la corriente
-    current = (max_val - VAL_REFERENCE) * CURRENT_STEP * FACTOR_RAIZ_DOS;
+       if (max_val < VAL_REFERENCE)
+       {
+           max_val = VAL_REFERENCE;
+       }
+
+       // calcula la corriente
+       current = (max_val - VAL_REFERENCE) * CURRENT_STEP * FACTOR_RAIZ_DOS;
+   */
 
     // Envia los datos por el puerto serie
     String send_current = "";
@@ -75,12 +106,11 @@ void current_measure()
     xQueueSend(queue_serial_tx, send_current.c_str(), pdMS_TO_TICKS(QUEQUE_TEMP_WAIT));
 
     // Registra los log y imprime en monitor serie en caso de debug
-    DEBUG_PRINT((String)max_val);
-    write_log("Max valor medido: " + (String)max_val);
+    DEBUG_PRINT("Max valor medido: " + (String)max_val);
+    write_log("Valor medio medido: " + (String)max_val);
 
     DEBUG_PRINT("Corriente electrica: " + (String)current);
     write_log("Corriente electrica: " + (String)current);
 }
 
 #endif // _CURRENT_MEASUREMENT_H
-
