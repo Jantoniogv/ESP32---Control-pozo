@@ -5,6 +5,7 @@
 
 #include "lora_send.h"
 #include "device.h"
+#include "fan.h"
 #include "serial_tx.h"
 #include "config_init.h"
 #include "log.h"
@@ -190,6 +191,38 @@ void data_serial_receive_control(String data)
         }
 
         send_state = (String)evCasaState + "=" + payload;
+
+        xQueueSend(queue_serial_tx, send_state.c_str(), pdMS_TO_TICKS(QUEQUE_TEMP_WAIT));
+    }
+
+    // Control del ventilador del cuadro
+    if (data.indexOf((String)dev_fan) != -1)
+    {
+        String payload = data.substring(data.indexOf("=") + 1);
+
+        DEBUG_PRINT(data);
+
+        if (payload == ON && elecVal.evCasa == false)
+        {
+            DEBUG_PRINT("Ventilador=ON");
+
+            // Enciende el ventilador
+            digitalWrite(FAN, HIGH);
+
+            // Marca el estado de la valvula
+            elecVal.dev_fan = true;
+        }
+        else if (payload == OFF)
+        {
+            DEBUG_PRINT("Ventilador=OFF");
+
+            // Apaga el ventilador
+            digitalWrite(FAN, LOW);
+
+            elecVal.dev_fan = false;
+        }
+
+        send_state = (String)dev_fan_state + "=" + payload;
 
         xQueueSend(queue_serial_tx, send_state.c_str(), pdMS_TO_TICKS(QUEQUE_TEMP_WAIT));
     }

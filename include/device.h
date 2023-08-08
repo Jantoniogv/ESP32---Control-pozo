@@ -20,6 +20,8 @@ struct elecVal
 
     bool motor = false;
 
+    bool dev_fan = false;
+
 } elecVal;
 
 #define EV_DEP_GALO_BAJO 2
@@ -45,6 +47,8 @@ const char evDepHuertoSec2[] = "regar/huerto/sec2";
 
 const char evCasa[] = "deposito/casa";
 
+const char dev_fan[] = "pozo/ventilador";
+
 const char restart_pozo_galo_bajo[] = "pozo_galo_bajo/restart";
 const char restart_valvulas_galo_bajo[] = "valvulas_galo_bajo/restart";
 const char restart_nivel_dep_galo_bajo[] = "nivel_dep_galo_bajo/restart";
@@ -61,6 +65,8 @@ const char evDepHuertoSec1State[] = "regar/huerto/sec1/state";
 const char evDepHuertoSec2State[] = "regar/huerto/sec2/state";
 
 const char evCasaState[] = "deposito/casa/state";
+
+const char dev_fan_state[] = "pozo/ventilador/state";
 
 // Topic enviar
 const char nivelDepGaloBajo[] = "nivel/deposito/galo/bajo";
