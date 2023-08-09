@@ -29,10 +29,6 @@ void current_measure()
 
     int max_val = 0;
 
-    int min_val = 0;
-
-    bool max_is = false;
-
     int val = 0;
 
     double val_cuadrado = 0;
@@ -57,7 +53,7 @@ void current_measure()
             val += analogRead(PIN_CURRENT_MEASURE);
         }
 
-        val = (val - VAL_REFERENCE) / N_SAMPLES_AVG;
+        val = (val / N_SAMPLES_AVG) - VAL_REFERENCE;
 
         val_cuadrado += val * val;
 
@@ -65,8 +61,6 @@ void current_measure()
         if (max_val < val)
         {
             max_val = val;
-
-            // max_is = true;
         }
 
         DEBUG_PRINT(val);
@@ -101,7 +95,7 @@ void current_measure()
 
     // Registra los log y imprime en monitor serie en caso de debug
     DEBUG_PRINT("Max valor medido: " + (String)max_val);
-    write_log("Valor medio medido: " + (String)max_val);
+    write_log("Max valor medido: " + (String)max_val);
 
     DEBUG_PRINT("Corriente electrica: " + (String)current);
     write_log("Corriente electrica: " + (String)current);

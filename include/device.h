@@ -102,7 +102,7 @@ void initPinDevice()
 
     // Inicializa pin ventilador
     pinMode(FAN, OUTPUT);
-    digitalWrite(EV_CASA, LOW);
+    digitalWrite(FAN, LOW);
 
     // Envia estados iniciales
     String state_init = (String)power_motor_state + "=OFF";

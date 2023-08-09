@@ -201,7 +201,7 @@ void data_serial_receive_control(String data)
 
         DEBUG_PRINT(data);
 
-        if (payload == ON && elecVal.evCasa == false)
+        if (payload == ON && elecVal.dev_fan == false)
         {
             DEBUG_PRINT("Ventilador=ON");
 
