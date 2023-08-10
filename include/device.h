@@ -6,8 +6,8 @@
 #include "lora_send.h"
 #include "serial_tx.h"
 
-#include "debug_utils.h"
 // #define DEBUG
+#include "debug_utils.h"
 
 // Estado de cada electrovalvula
 struct elecVal
@@ -30,7 +30,7 @@ struct elecVal
 
 #define MOTOR 25
 
-#define FAN 23
+#define FAN 22
 
 #define ON "ON"
 
@@ -49,7 +49,7 @@ const char evDepHuertoSec2[] = "regar/huerto/sec2";
 
 const char evCasa[] = "deposito/casa";
 
-const char dev_fan[] = "pozo/ventilador";
+const char dev_fan[] = "ventilador/pozo";
 
 const char restart_pozo_galo_bajo[] = "pozo_galo_bajo/restart";
 const char restart_valvulas_galo_bajo[] = "valvulas_galo_bajo/restart";
@@ -68,7 +68,7 @@ const char evDepHuertoSec2State[] = "regar/huerto/sec2/state";
 
 const char evCasaState[] = "deposito/casa/state";
 
-const char dev_fan_state[] = "pozo/ventilador/state";
+const char dev_fan_state[] = "ventilador/pozo/state";
 
 // Topic enviar
 const char nivelDepGaloBajo[] = "nivel/deposito/galo/bajo";

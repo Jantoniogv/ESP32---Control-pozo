@@ -7,8 +7,8 @@
 #include "device.h"
 #include "config_init.h"
 
-#include "debug_utils.h"
 // #define DEBUG
+#include "debug_utils.h"
 
 // void data_lora_receive_control(String data)
 void data_lora_receive_control(String data)

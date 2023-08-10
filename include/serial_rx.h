@@ -7,8 +7,8 @@
 #include "device_serial_handler.h"
 #include "log.h"
 
-#include "debug_utils.h"
 // #define DEBUG
+#include "debug_utils.h"
 
 void serial_rx()
 {

@@ -10,8 +10,8 @@
 #include "log.h"
 #include "timer_restart.h"
 
-#include "debug_utils.h"
 // #define DEBUG
+#include "debug_utils.h"
 
 // Declara le controlador del temporizador de la medida de la corriente
 TimerHandle_t timer_start_motor;

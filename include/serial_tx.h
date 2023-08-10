@@ -7,8 +7,8 @@
 #include "config_init.h"
 #include "log.h"
 
-#include "debug_utils.h"
 // #define DEBUG
+#include "debug_utils.h"
 
 QueueHandle_t queue_serial_tx = 0;
 
@@ -23,7 +23,7 @@ void serial_tx(void *pvParameter)
         {
             data = String(data_buffer);
 
-            // Borra el buffer en caso de tener algun byte corrupto en el
+            // Borra el buffer en caso de tener algun byte corrupto
             while (SerialCom.available())
             {
                 SerialCom.read();

@@ -5,8 +5,8 @@
 #include "lora_init.h"
 #include "log.h"
 
-#include "debug_utils.h"
 // #define DEBUG
+#include "debug_utils.h"
 
 void sendDataLora(String data)
 {

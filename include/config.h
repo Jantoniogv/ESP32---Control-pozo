@@ -9,8 +9,8 @@
 #include "save_flash.h"
 #include "config_init.h"
 
-#include "debug_utils.h"
 // #define DEBUG
+#include "debug_utils.h"
 
 class Config
 {

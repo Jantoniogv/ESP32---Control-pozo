@@ -7,8 +7,8 @@
 #include "device.h"
 #include "log.h"
 
-#include "debug_utils.h"
 // #define DEBUG
+#include "debug_utils.h"
 
 #define PIN_CURRENT_MEASURE 39 // Pin toma datos analogicos
 
@@ -63,7 +63,7 @@ void current_measure()
             max_val = val;
         }
 
-        DEBUG_PRINT(val);
+        // DEBUG_PRINT(val);
 
         val = 0;
 

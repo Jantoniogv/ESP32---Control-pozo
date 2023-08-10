@@ -10,8 +10,8 @@
 #include "page_config.h"
 #include "log.h"
 
-#include "debug_utils.h"
 // #define DEBUG
+#include "debug_utils.h"
 
 AsyncWebServer server(80);
 

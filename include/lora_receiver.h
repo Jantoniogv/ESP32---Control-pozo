@@ -5,8 +5,8 @@
 #include "device_lora_handler.h"
 #include "log.h"
 
-#include "debug_utils.h"
 // #define DEBUG
+#include "debug_utils.h"
 
 /* void testMem(String taskName)
 {
