@@ -16,7 +16,7 @@
 #include "device_serial_handler.h"
 #include "current_measurement.h"
 
-// #define DEBUG
+#define DEBUG
 #include "debug_utils.h"
 
 void setup()

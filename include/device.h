@@ -120,9 +120,8 @@ void initPinDevice()
     state_init = (String)dev_fan + "=OFF";
     xQueueSend(queue_serial_tx, state_init.c_str(), pdMS_TO_TICKS(QUEQUE_TEMP_WAIT));
 
-    DEBUG_PRINT("Pines de las electrovalvulas, motor y ventilador iniciados...");
-
     // Escribe en el log inicializacion de los pines
+    DEBUG_PRINT("Pines de las electrovalvulas, motor y ventilador iniciados...");
     write_log("Pines de las electrovalvulas, motor y ventilador iniciados...");
 }
 

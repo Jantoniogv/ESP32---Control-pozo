@@ -14,7 +14,7 @@
 
 #define N_SAMPLES 2000        // Numero de muestras tomadas
 #define N_SAMPLES_AVG 10      // Numero de muestras en un instante dado, a fin de tomar la media de estas 10 para una de cada muestra total
-#define VAL_REFERENCE 2048    // 2048 es el valor teorico medido cuando la corriente es 0 y el voltaje seria 1,66 V
+#define VAL_REFERENCE 1860    // 2048 es el valor teorico medido cuando la corriente es 0 y el voltaje seria 1,66 V
 #define VAL_MAX 4096          // 4096 es el valor maximo que debe de medir el ADC
 #define CURRENT_STEP 0.01626  // Amperios cada punto leido analogico leido
 #define FACTOR_RAIZ_DOS 0.707 // Valor resultante de dividir 1 entre raiz cuadrada de 2
@@ -27,7 +27,9 @@ void current_measure()
 {
     double current;
 
-    int max_val = 0;
+    int max_val = 1200;
+
+    int min_val = 2200;
 
     int val = 0;
 
@@ -40,28 +42,31 @@ void current_measure()
         {
             val += analogRead(PIN_CURRENT_MEASURE);
         }
-        val = val / N_SAMPLES_AVG;
-
-        // Busca el valor maximo medido
-        if (max_val < val)
-        {
-            max_val = val;
-        } */
+        val = val / N_SAMPLES_AVG */
+        ;
 
         for (int j = 0; j < N_SAMPLES_AVG; j++)
         {
             val += analogRead(PIN_CURRENT_MEASURE);
         }
 
-        val = (val / N_SAMPLES_AVG) - VAL_REFERENCE;
-
-        val_cuadrado += val * val;
+        val = (val / N_SAMPLES_AVG);
 
         // Busca el valor maximo medido
         if (max_val < val)
         {
             max_val = val;
         }
+
+        // Busca el valor minimo medido
+        if (min_val > val)
+        {
+            min_val = val;
+        }
+
+        val -= VAL_REFERENCE;
+
+        val_cuadrado += val * val;
 
         // DEBUG_PRINT(val);
 
@@ -96,6 +101,9 @@ void current_measure()
     // Registra los log y imprime en monitor serie en caso de debug
     DEBUG_PRINT("Max valor medido: " + (String)max_val);
     write_log("Max valor medido: " + (String)max_val);
+
+    DEBUG_PRINT("Min valor medido: " + (String)min_val);
+    write_log("Min valor medido: " + (String)min_val);
 
     DEBUG_PRINT("Corriente electrica: " + (String)current);
     write_log("Corriente electrica: " + (String)current);
