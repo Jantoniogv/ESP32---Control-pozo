@@ -14,8 +14,8 @@
 
 #define N_SAMPLES 2000        // Numero de muestras tomadas
 #define N_SAMPLES_AVG 10      // Numero de muestras en un instante dado, a fin de tomar la media de estas 10 para una de cada muestra total
-#define VAL_REFERENCE 1860    // 2048 es el valor teorico medido cuando la corriente es 0 y el voltaje seria 1,66 V
-#define VAL_MAX 4096          // 4096 es el valor maximo que debe de medir el ADC
+#define VAL_REFERENCE 1860    // Es el valor teorico medido cuando la corriente es 0 y el voltaje seria 1,66 V
+#define VAL_OFFSET 25         // Es el valor que compensa el error de medida debido a las interferencias inducidas por las cargas de las bobinas
 #define CURRENT_STEP 0.01626  // Amperios cada punto leido analogico leido
 #define FACTOR_RAIZ_DOS 0.707 // Valor resultante de dividir 1 entre raiz cuadrada de 2
 
@@ -27,9 +27,9 @@ void current_measure()
 {
     double current;
 
-    int max_val = 1200;
+    int max_val = 0;
 
-    int min_val = 2200;
+    int min_val = 2048;
 
     int val = 0;
 
@@ -51,6 +51,16 @@ void current_measure()
         }
 
         val = (val / N_SAMPLES_AVG);
+
+        // Compensa la desviacion en la medida con un offset medido empiricamente
+        if (val > VAL_REFERENCE)
+        {
+            val -= VAL_OFFSET;
+        }
+        else if (val < VAL_REFERENCE)
+        {
+            val += VAL_OFFSET;
+        }
 
         // Busca el valor maximo medido
         if (max_val < val)
@@ -75,14 +85,10 @@ void current_measure()
         vTaskDelay(pdMS_TO_TICKS(1));
     }
 
+    // Algoritmo para calcular el rms de la intensidad electrica medida
     current = sqrt(val_cuadrado / N_SAMPLES) * CURRENT_STEP;
 
     /* // Corrige posibles valores extremos
-    if (max_val > VAL_MAX)
-    {
-        max_val = VAL_MAX;
-    }
-
     if (max_val < VAL_REFERENCE)
     {
         max_val = VAL_REFERENCE;
